@@ -22,7 +22,15 @@ const Post = sequelize.define('Post', {
             model: User,
             key: 'id'
         }
-    }
+    }, 
+    category: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    tags: {
+        type: DataTypes.JSON, // Using JSON for MySQL.
+        allowNull: true
+    },
 }, {
     timestamps: true,
     createdAt: 'created_at',

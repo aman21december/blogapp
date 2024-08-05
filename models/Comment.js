@@ -23,11 +23,15 @@ const Comment = sequelize.define('Comment', {
             model: Post,
             key: 'id'
         }
+    },
+    parent_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true // Allow null for top-level comments
     }
 }, {
     timestamps: true,
     createdAt: 'created_at',
-    updatedAt: false
+    updatedAt: 'updated_at'
 });
 
 User.hasMany(Comment, { foreignKey: 'user_id' });

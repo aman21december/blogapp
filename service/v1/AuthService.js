@@ -1,11 +1,11 @@
 const bcrypt=require("bcryptjs");
 const jwt=require("jsonwebtoken")
 const User = require("../../models/User");
-const { NOT_FOUND, UNAUTHORIZED } = require("../../helper/status-codes");
+const { NOT_FOUND, UNAUTHORIZED, SERVER_ERROR } = require("../../helper/status-codes");
 const { ErrorHandler } = require("../../helper");
 class AuthService{
     async signup(req,res,next){
-        const { username, email, password } = req.body;
+        const { username, email, password} = req.body;
 
         try {
             const hashedPassword = await bcrypt.hash(password, 10);

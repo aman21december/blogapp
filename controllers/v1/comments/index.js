@@ -1,3 +1,3 @@
-const { getcomment,postcomment } = require('./comments.js')
+const { getcomment,postcomment,editComment,deleteComment, replyToComment } = require('./comments.js')
 
-module.exports= { getcomment,postcomment}
+module.exports= { getcomment,postcomment,editComment,deleteComment,replyToComment}

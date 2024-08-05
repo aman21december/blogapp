@@ -17,6 +17,30 @@ const getcomment = async (req,res,next) =>{
       next(error);
      }
 }
+const editComment= async (req,res,next)=>{
+  try{
+    return await new CommentService().editComment(req,res,next);
+  }
+  catch(error){
+    next(error);
+  }
+}
+const deleteComment= async (req,res,next)=>{
+  try{
+    return await new CommentService().deleteComment(req,res,next);
+  }
+  catch(error){
+    next(error);
+  }
+}
+const replyToComment= async (req,res,next)=>{
+  try{
+    return await new CommentService().replyToComment(req,res,next);
+  }
+  catch(error){
+    next(error);
+  }
+}
 module.exports = {
-  getcomment,postcomment
+  getcomment,postcomment,editComment,deleteComment,replyToComment
 };

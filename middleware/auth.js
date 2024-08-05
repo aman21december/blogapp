@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
 /**
  *
@@ -13,7 +14,7 @@ const jwt = require("jsonwebtoken");
  * @returns
  */
 
-module.exports = function (req, res, next) {
+module.exports =async function (req, res, next) {
 	const { token } = req.headers;
 	let user = { isAuth: false };
 	req.user = user;
@@ -28,8 +29,8 @@ module.exports = function (req, res, next) {
 	}
 
 	if (!decoded) return next();
-
-	user = { ...user, isAuth: true, ...decoded };
+	const user1=await User.findByPk(decoded.id)
+	user = { ...user, isAuth: true, ...decoded,role:user1.role};
 	req.user = user;
 	return next();
 };
