@@ -1,4 +1,4 @@
-const { upload } = require("../../config/multer-profilepic");
+const { upload } = require("../../config/multer-profilepic.js");
 const { ErrorHandler } = require("../../helper");
 const { SERVER_ERROR } = require("../../helper/status-codes");
 const User = require("../../models/User");
@@ -39,7 +39,7 @@ class Profile{
                 try {
                  const profilePictureUrl = `/uploads/profilePictures/${req.user.id}_${req.file.originalname}`;
                 await User.update({ profilePicture: profilePictureUrl }, { where: { id: req.user.id } });
-                return({ message: 'Profile picture uploaded successfully', profilePicture: profilePictureUrl });              
+                resolve({ message: 'Profile picture uploaded successfully', profilePicture: profilePictureUrl });              
                 } catch (err) {
                     reject(err);
                 }

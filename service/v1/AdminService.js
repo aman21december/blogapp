@@ -1,3 +1,4 @@
+const { ErrorHandler } = require("../../helper");
 const { SERVER_ERROR } = require("../../helper/status-codes");
 const Comment = require("../../models/Comment");
 const Post = require("../../models/Post");
