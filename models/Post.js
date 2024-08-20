@@ -15,6 +15,11 @@ const Post = sequelize.define('Post', {
         type: DataTypes.STRING, // Store the image path as a string
         allowNull: true
     },
+    views:{
+        type: DataTypes.INTEGER,
+        defaultValue:0,
+        allowNull:false,
+    },
     user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,

@@ -36,6 +36,20 @@ const getSinglePost = async (req,res,next) =>{
         next(error);
        }
   }
+  const getViewsForPost = async (req,res,next) =>{
+    try{
+      return  await new PostService().getViewsForPost(req,res,next);
+      } catch (error) {
+        next(error);
+       }
+  }
+  const populerPost = async (req,res,next) =>{
+    try{
+      return  await new PostService().populerPost(req,res,next);
+      } catch (error) {
+        next(error);
+       }
+  }
 module.exports = {
-  getPost,sendPost,getSinglePost,updatePost,deletePost
+  getPost,sendPost,getSinglePost,updatePost,deletePost,getViewsForPost,populerPost
 };

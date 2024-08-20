@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const { ErrorHandler } = require("../../helper");
 const { SERVER_ERROR, NOT_FOUND, UNAUTHORIZED } = require("../../helper/status-codes");
 const Post=require("../../models/Post")
@@ -119,6 +120,53 @@ class PostService{
         catch(err){
             if (err.statusCode)throw new ErrorHandler(err.statusCode,err.message);
             throw new ErrorHandler(SERVER_ERROR,err);
+        }
+    }
+    async getViewsForPost(req,res,next){
+        const { id } = req.params;
+        try{
+            const post = await Post.findByPk(id);
+    
+            if (!post) {
+                throw new ErrorHandler(NOT_FOUND,"resource not found");
+            }
+    
+            return({views:post.views});
+        }
+        catch(err){
+            if (err.statusCode)throw new ErrorHandler(err.statusCode,err.message);
+           throw new ErrorHandler(SERVER_ERROR,err);
+        }
+
+    }
+    async populerPost(req,res,next){
+        const { page = 1, limit = 10, timePeriod } = req.query;
+        const offset = (page - 1) * limit;
+      
+        try {
+          const whereCondition = {};
+      
+          // Filter posts based on the time period (e.g., last week, last month)
+          if (timePeriod) {
+            const date = new Date();
+            if (timePeriod === 'week') {
+              date.setDate(date.getDate() - 7);
+            } else if (timePeriod === 'month') {
+              date.setMonth(date.getMonth() - 1);
+            }
+            whereCondition.createdAt = { [Op.gte]: date };
+          }
+      
+          const popularPosts = await Post.findAll({
+            where: whereCondition,
+            order: [['views', 'DESC']],
+            limit: parseInt(limit),
+            offset: parseInt(offset),
+          });
+      
+          res.json(popularPosts);
+        } catch (err) {
+          res.status(500).json({ error: err.message });
         }
     }
 }

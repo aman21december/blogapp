@@ -23,5 +23,12 @@ const updateProfilepic = async (req, res, next) => {
     next(error);
   }
 };
+const notification = async (req, res, next) => {
+  try {
+    return  await new Profile().notification(req,res,next);
+  } catch (error) {
+    next(error);
+  }
+};
 
-module.exports={getUserProfile,updateProfile,updateProfilepic};
+module.exports={getUserProfile,updateProfile,updateProfilepic,notification};

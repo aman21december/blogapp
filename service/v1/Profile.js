@@ -11,7 +11,7 @@ class Profile{
             attributes:{exclude:['password']}
         });
         return(user);
-        }catch(err){
+        }catch(error){
             if (error.statusCode)
                 throw new ErrorHandler(error.statusCode, error.message);
               throw new ErrorHandler(SERVER_ERROR, error);              
@@ -23,7 +23,7 @@ class Profile{
             await User.update({firstName,lastName},{where:{id:req.user.id}})
             return ({message:"profile updated successfully"})
         }
-        catch(err)
+        catch(error)
         {
             if (error.statusCode)
                 throw new ErrorHandler(error.statusCode, error.message);
@@ -46,6 +46,18 @@ class Profile{
             });
         });
     }
+    async notification(req,res,next){
+        const { emailNotifications } = req.body;
+
+    try {
+        await User.update({ emailNotifications }, { where: { id: req.user.id } });
+        return({ message: 'Notification settings updated' });
+  } catch (error) {
+        if (error.statusCode)
+            throw new ErrorHandler(error.statusCode, error.message);
+          throw new ErrorHandler(SERVER_ERROR, error);                  
+  }
+}
 }
 
 

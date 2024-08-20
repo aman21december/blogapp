@@ -2,7 +2,10 @@ const { ErrorHandler } = require("../../helper");
 const { NOT_FOUND, SERVER_ERROR, BAD_GATEWAY } = require("../../helper/status-codes");
 const Comment = require("../../models/Comment");
 const Post = require("../../models/Post");
-
+const {sendEmail}=require("../../utils/sendMail")
+const ejs=require("ejs")
+const path=require("path");
+const User = require("../../models/User");
 class CommentService{
     async postComment(req,res,next){
         const { postId } = req.params;
@@ -10,7 +13,8 @@ class CommentService{
     
         try {
             const post = await Post.findByPk(postId);
-    
+            const user = await User.findByPk(post.user_id)
+
             if (!post) {
                 throw new ErrorHandler(NOT_FOUND,"resource not found");   
             }
@@ -20,9 +24,17 @@ class CommentService{
                 user_id: req.user.id,
                 post_id: postId
             });
-    
+            const templatePath=path.join(__dirname+"../../../views/emails/new-comment.ejs")
+            
+            const html = await ejs.renderFile(templatePath,{  
+                username: user.username,
+                postTitle: post.title,
+                commentText: newComment.content,})
+            await sendEmail(user.email, 'New Comment on Your Post', html);
             return(newComment);
+
         } catch (err) {
+            return next(new ErrorHandler(err.statusCode,err.message))
             if (err.statusCode)throw new ErrorHandler(err.statusCode,err.message);
             throw new ErrorHandler(SERVER_ERROR,err);
         }

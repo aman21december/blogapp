@@ -7,6 +7,9 @@ const sequelize2=require("./config/database")
 require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` });
 require("moment-timezone")().tz("Asia/Kolkata");
 
+const session = require('express-session');
+
+
 const { validator, validateToken, handleError } = require("./middleware");
 
 console.log(process.env.NODE_ENV);
@@ -16,6 +19,12 @@ const sequelize = require("./config/db");
 const { morganLogger } = require("./middleware/logger");
 
 const app = express();
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 60000 }
+}));
 
 app.use("/", express.static(path.join(__dirname, "../public")));
 app.use('/uploads', express.static(path.join(__dirname, './uploads')));
